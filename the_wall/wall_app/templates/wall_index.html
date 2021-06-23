@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wall</title>
+</head>
+<body>
+    <form action="/wall/new_message" method="post">
+        {% csrf_token %}
+        <textarea name="message" id="" cols="30" rows="10"></textarea>
+        <button>Post a message</button>
+    </form>
+    <div>
+        {% for message in messages %}
+        <p>{{message.user.first_name}} {{message.user.last_name}}- {{message.created_at}}</p>
+        <p>{{message.message}}</p>
+        <form action="/wall/post_comment/{{message.id}}" method="post">
+            {% csrf_token %}
+            <textarea name="comment" id="" cols="30" rows="5"></textarea>
+            <button>Post Comment</button>
+        </form>
+        {% for comment in message.comments.all %}
+        <p>{{comment.user.first_name}} {{comment.user.last_name}} - {{comment.created_at}}</p>
+        <p>{{comment.comment}}</p>
+        {% endfor %}
+        {% endfor %}
+    </div>
+</body>
+</html>
